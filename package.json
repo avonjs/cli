@@ -1,5 +1,5 @@
 {
-  "name": "@avonjs/avonjs",
+  "name": "@avonjs/cli",
   "version": "1.0.0",
   "description": "The Avonjs (1.*) command line interface.",
   "main": "dist/index.js",
@@ -22,16 +22,17 @@
   "keywords": [
     "express",
     "avon",
-    "avonjs"
+    "avonjs",
+    "cli"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/avonjs/avonjs.git"
+    "url": "https://github.com/avonjs/cli.git"
   },
   "bugs": {
-    "url": "https://github.com/avonjs/avonjs/issues"
+    "url": "https://github.com/avonjs/cli/issues"
   },
-  "homepage": "https://github.com/avonjs/avonjs#readme",
+  "homepage": "https://github.com/avonjs/cli#readme",
   "author": "zarehesmaiel@gmail.com",
   "license": "MIT",
   "devDependencies": {
