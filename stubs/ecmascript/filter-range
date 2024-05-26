@@ -11,6 +11,6 @@ export default class __NAME__ extends Filters.Range {
    * @returns {any}
    */
   apply(request, repository, value) {
-    // modify repository
+    super.repository(request, repository, value)
   }
 }

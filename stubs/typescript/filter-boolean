@@ -10,6 +10,6 @@ export default class __NAME__ extends Filters.Boolean {
     repository: Repositories.Repository,
     value: any,
   ): any {
-    // modify repository
+    super.repository(request, repository, value)
   }
 }
