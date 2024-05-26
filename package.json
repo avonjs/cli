@@ -1,7 +1,7 @@
 {
   "name": "@avonjs/cli",
-  "version": "1.0.0",
-  "description": "The Avonjs (1.*) command line interface.",
+  "version": "1.1.0",
+  "description": "The Avonjs command line interface.",
   "main": "dist/index.js",
   "types": "dist/index.ts",
   "private": false,
