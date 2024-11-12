@@ -1,124 +1,124 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { dirname, join } from "path";
-import { Command, Option, type OptionValues } from "commander";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { Command, Option, type OptionValues } from 'commander';
 
 export const command = (command: string) => {
-	return new Command(command)
-		.option("-d, --dir <directory>", "output directory", basePath())
-		.option("-f, --force", "Force to create file")
-		.addOption(
-			new Option("-o, --output <output>", "File output type")
-				.choices(["typescript", "ecmascript", "commonjs"])
-				.default(moduleType()),
-		);
+  return new Command(command)
+    .option('-d, --dir <directory>', 'output directory', basePath())
+    .option('-f, --force', 'Force to create file')
+    .addOption(
+      new Option('-o, --output <output>', 'File output type')
+        .choices(['typescript', 'ecmascript', 'commonjs'])
+        .default(moduleType()),
+    );
 };
 
 const sourceDirectory = () => readPackage().sourceDir;
-const basePath = () => join(sourceDirectory(), "avonjs");
+const basePath = () => join(sourceDirectory(), 'avonjs');
 const moduleType = () => {
-	const packageJson = readPackage();
+  const packageJson = readPackage();
 
-	if (
-		"typescript" in packageJson.dependencies ||
-		"typescript" in packageJson.devDependencies
-	) {
-		return "typescript";
-	} else if (packageJson.type === "module") {
-		return "ecmascript";
-	} else {
-		return "commonjs";
-	}
+  if (
+    'typescript' in packageJson.dependencies ||
+    'typescript' in packageJson.devDependencies
+  ) {
+    return 'typescript';
+  } else if (packageJson.type === 'module') {
+    return 'ecmascript';
+  } else {
+    return 'commonjs';
+  }
 };
 
 const readPackage = () => {
-	const filename = join(process.cwd(), "package.json");
-	const defaults = { sourceDir: "src", dependencies: {}, devDependencies: {} };
+  const filename = join(process.cwd(), 'package.json');
+  const defaults = { sourceDir: 'src', dependencies: {}, devDependencies: {} };
 
-	if (!existsSync(filename)) {
-		return defaults;
-	}
+  if (!existsSync(filename)) {
+    return defaults;
+  }
 
-	try {
-		const packageData = readFileSync(filename, "utf8");
+  try {
+    const packageData = readFileSync(filename, 'utf8');
 
-		return { ...defaults, ...JSON.parse(packageData) };
-	} catch (err) {
-		console.error("Error reading package.json:", err);
-		return defaults;
-	}
+    return { ...defaults, ...JSON.parse(packageData) };
+  } catch (err) {
+    console.error('Error reading package.json:', err);
+    return defaults;
+  }
 };
 
 export const ensureDirectoryExists = (directoryPath: string): void => {
-	if (!existsSync(directoryPath)) {
-		try {
-			mkdirSync(directoryPath, { recursive: true });
-			console.info(`Directory '${directoryPath}' created.`);
-		} catch (err) {
-			console.error(`Error creating directory '${directoryPath}':`, err);
-		}
-	}
+  if (!existsSync(directoryPath)) {
+    try {
+      mkdirSync(directoryPath, { recursive: true });
+      console.info(`Directory '${directoryPath}' created.`);
+    } catch (err) {
+      console.error(`Error creating directory '${directoryPath}':`, err);
+    }
+  }
 };
 
 export const ensureResourceDirectoryExists = (directory?: string): void => {
-	ensureDirectoryExists(
-		join(process.cwd(), directory ?? basePath(), "resources"),
-	);
+  ensureDirectoryExists(
+    join(process.cwd(), directory ?? basePath(), 'resources'),
+  );
 };
 
 export const ensureModelDirectoryExists = (directory?: string): void => {
-	ensureDirectoryExists(join(process.cwd(), directory ?? basePath(), "models"));
+  ensureDirectoryExists(join(process.cwd(), directory ?? basePath(), 'models'));
 };
 
 export const ensureRepositoryDirectoryExists = (directory?: string): void => {
-	ensureDirectoryExists(
-		join(process.cwd(), directory ?? basePath(), "repositories"),
-	);
+  ensureDirectoryExists(
+    join(process.cwd(), directory ?? basePath(), 'repositories'),
+  );
 };
 
 export const ensureFilterDirectoryExists = (directory?: string): void => {
-	ensureDirectoryExists(
-		join(process.cwd(), directory ?? basePath(), "filters"),
-	);
+  ensureDirectoryExists(
+    join(process.cwd(), directory ?? basePath(), 'filters'),
+  );
 };
 
 export const ensureOrderingDirectoryExists = (directory?: string): void => {
-	ensureDirectoryExists(
-		join(process.cwd(), directory ?? basePath(), "orderings"),
-	);
+  ensureDirectoryExists(
+    join(process.cwd(), directory ?? basePath(), 'orderings'),
+  );
 };
 
 export const ensureActionDirectoryExists = (directory?: string): void => {
-	ensureDirectoryExists(
-		join(process.cwd(), directory ?? basePath(), "actions"),
-	);
+  ensureDirectoryExists(
+    join(process.cwd(), directory ?? basePath(), 'actions'),
+  );
 };
 
 export const exists = (path: string, directory?: string): boolean => {
-	return existsSync(join(process.cwd(), directory ?? basePath(), path));
+  return existsSync(join(process.cwd(), directory ?? basePath(), path));
 };
 
 export const copy = (
-	stub: string,
-	path: string,
-	options: OptionValues,
-	callback = (content: string) => content,
+  stub: string,
+  path: string,
+  options: OptionValues,
+  callback = (content: string) => content,
 ) => {
-	const filename = `${path}.${options.output === "typescript" ? "ts" : "js"}`;
-	const file = join(process.cwd(), options.dir ?? basePath(), filename);
+  const filename = `${path}.${options.output === 'typescript' ? 'ts' : 'js'}`;
+  const file = join(process.cwd(), options.dir ?? basePath(), filename);
 
-	if (exists(filename, options.dir) && !options.force) {
-		console.error(`File ${file} already exists`);
-		return;
-	}
+  if (exists(filename, options.dir) && !options.force) {
+    console.error(`File ${file} already exists`);
+    return;
+  }
 
-	writeFileSync(file, Buffer.from(callback(readStub(stub, options))));
-	console.info(`File ${file} created`);
+  writeFileSync(file, Buffer.from(callback(readStub(stub, options))));
+  console.info(`File ${file} created`);
 };
 
 export const readStub = (stub: string, options: OptionValues) => {
-	const stubBuffer = readFileSync(
-		join(dirname(__dirname), "stubs", options.output, stub),
-	);
+  const stubBuffer = readFileSync(
+    join(dirname(__dirname), 'stubs', options.output, stub),
+  );
 
-	return stubBuffer.toString();
+  return stubBuffer.toString();
 };
